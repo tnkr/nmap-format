@@ -43,18 +43,6 @@ def parse_nmap_xml(xml_file):
 
     return hosts
 
-def display_table(hosts):
-    table_headers = ["IP", "Hostname", "Services"]
-    table_data = []
-
-    for host in hosts:
-        ip = Fore.GREEN + host[0] + Style.RESET_ALL
-        hostname = Fore.CYAN + host[1] + Style.RESET_ALL
-        services = Fore.MAGENTA + host[2] + Style.RESET_ALL
-        table_data.append([ip, hostname, services])
-
-    print(tabulate(table_data, headers=table_headers, tablefmt="grid"))
-
 def display_tree(hosts):
     for host in hosts:
         ip = Fore.GREEN + host[0] + Style.RESET_ALL
@@ -65,10 +53,27 @@ def display_tree(hosts):
         if hostname:
             print(f"└── {hostname}")
         for service in services:
-            port_state = service.split('(')[-1][:-1].lower()  # Get the port state (open/closed) from the service string
+            port_state = service.split('(')[-1][:-1].lower()  # Get the port state (open/closed/filtered) from the service string
             if port_state == "closed":
                 service = Fore.RED + service + Style.RESET_ALL  # Apply red color to closed ports
+            elif port_state == "filtered":
+                service = Fore.YELLOW + service + Style.RESET_ALL  # Apply yellow color to filtered ports
             print(f"    └── {service}")
+
+#def display_tree(hosts):
+#    for host in hosts:
+#        ip = Fore.GREEN + host[0] + Style.RESET_ALL
+#        hostname = Fore.CYAN + host[1] + Style.RESET_ALL
+#        services = host[2].split('\n')
+#
+#        print(ip)
+#        if hostname:
+#            print(f"└── {hostname}")
+#        for service in services:
+#            port_state = service.split('(')[-1][:-1].lower()  # Get the port state (open/closed) from the service string
+#            if port_state == "closed":
+#                service = Fore.RED + service + Style.RESET_ALL  # Apply red color to closed ports
+#            print(f"    └── {service}")
             
 #def display_tree(hosts):
 #    for host in hosts:
